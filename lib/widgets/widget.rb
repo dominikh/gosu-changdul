@@ -100,10 +100,24 @@ module Widgets
     end
 
     # draw relative to the widget
+    # TODO don't draw outside the container
+
+    required_arguments :x1, :y1, :x2, :y22
+    default_arguments zorder: 1, mode: :default, color1: Gosu::Color.new(0xffffffff), color2: Gosu::Color.new(0xffffffff), color: nil
+    def draw_line(args = { })
+      if args[:color]
+        args[:color1], args[:color2] = args[:color], args[:color]
+      end
+      rel_x, rel_y = drawable_area[0]
+
+      @window.draw_line(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
+                        args[:x2]+rel_x, args[:y2]+rel_y, args[:color2], args[:zorder]
+                        )
+    end
+
     required_arguments :x1, :y1, :x2, :y2, :x3, :y3, :x4, :y4
     default_arguments zorder: 1, mode: :default, color1: Gosu::Color.new(0xffffffff), color2: Gosu::Color.new(0xffffffff), color3: Gosu::Color.new(0xffffffff), color4: Gosu::Color.new(0xffffffff), color: nil
     def draw_quad(args = { })
-      # TODO don't draw outside the container
       if args[:color]
         args[:color1], args[:color2], args[:color3], args[:color4] = args[:color], args[:color], args[:color], args[:color]
       end
@@ -112,8 +126,21 @@ module Widgets
       @window.draw_quad(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
                         args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
                         args[:x3]+rel_x, args[:y3]+rel_y, args[:color3],
-                        args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], @zorder
+                        args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], args[:zorder]
                         )
+    end
+
+    required_arguments :x1, :y1, :x2, :y2, :x3, :y3
+    default_arguments zorder: 1, mode: :default, color1: Gosu::Color.new(0xffffffff), color2: Gosu::Color.new(0xffffffff), color3: Gosu::Color.new(0xffffffff), color: nil
+    def draw_triangle(args = { })
+      if args[:color]
+        args[:color1], args[:color2], args[:color3] = args[:color], args[:color], args[:color]
+      end
+
+      @window.draw_triangle(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
+                            args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
+                            args[:x3]+rel_x, args[:y3]+rel_y, args[:color3], args[:zorder]
+                            )
     end
 
     def signal_connect(signal, &block)
