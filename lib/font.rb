@@ -1,12 +1,17 @@
 class Font < Gosu::Font
   include Opacity
 
-  def initialize(window, font, size, color = Gosu::Color.new(0xffffffff))
-    super(window, font, size)
-    @colors = { :font => color }
+  required_arguments :window, :height
+  default_arguments color: Gosu::Color.new(0xffffffff), font: Gosu.default_font_name
+  def initialize(args = { })
+    super(args[:window], args[:font], args[:height])
+    @colors = { :font => args[:color] }
   end
 
-  def draw(text, x, y, zorder, x_factor, y_factor)
-    super(text, x, y, zorder, x_factor, y_factor, @colors[:font])
+
+  required_arguments :text, :x, :y
+  default_arguments zorder: 1, x_factor: 1.0, y_factor: 1.0
+  def draw(args = { })
+    super(args[:text], args[:x], args[:y], args[:zorder], args[:x_factor], args[:y_factor], @colors[:font])
   end
 end

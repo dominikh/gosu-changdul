@@ -14,18 +14,21 @@ module Widgets
     attr_accessor :focussed
     attr_accessor :parent
     attr_accessor :selectable
-    def initialize(window, x, y, width, height, args = { })
-      @window = window
-      @x, @y, @width, @height = x, y, width, height
-      @initial_x, @initial_y = x, y
+
+    required_arguments :window, :x, :y, :width, :height
+    default_arguments zorder: 1, font_height: 16
+    def initialize(args = { })
+      @window = args[:window]
+      @x, @y, @width, @height = args[:x], args[:y], args[:width], args[:height]
+      @initial_x, @initial_y = @x, @y
       @selected = false
-      @zorder = args[:zorder] || 1
+      @zorder = args[:zorder]
       @initial_zorder = @zorder
       @active = false
       @focussed = false
       @signals = { :button_down => nil, :button_up => nil}
       @parent  = FakeParent.new(0,0, @window.width, @window.height)
-      @font = Font.new(window, Gosu::default_font_name, args[:font_height] || 16)
+      @font = Font.new(window: @window, height: args[:font_height])
       @colors = { }
 
       @selectable = true

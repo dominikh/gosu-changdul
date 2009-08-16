@@ -3,17 +3,18 @@ module Widgets
     include Draggable
 
     attr_accessor :title
-    def initialize(window, x, y, width, height, args = { })
-      super(window, x, y, width, height)
-      @title = args[:title] || "<nil>"
+    default_arguments title: "<nil>"
+    def initialize(args = { })
+      super
+      @title = args[:title]
 
-      b = Widgets::Button.new(@window, "Decrease opacity", 0, 0)
+      b = Widgets::Button.new(window: @window, label: "Decrease opacity")
       b.signal_connect(:click) do
         self.opacity -= 0.1
       end
       add(b, 50, 50)
 
-      b = Widgets::Button.new(@window, "Increase opacity", 0, 0)
+      b = Widgets::Button.new(window: @window, label: "Increase opacity")
       b.signal_connect(:click) do
         self.opacity += 0.1
       end
@@ -75,7 +76,7 @@ module Widgets
                         x3, y3, @colors[:titlebar][tcolor],
                         x4, y4, @colors[:titlebar][tcolor], @zorder)
 
-      @font.draw(@title, x+5, y+5, @zorder, 1.0, 1.0)
+      @font.draw(text: @title, x: x+5, y: y+5, zorder: @zorder)
 
       super
     end

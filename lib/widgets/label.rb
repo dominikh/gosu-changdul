@@ -1,15 +1,17 @@
 module Widgets
   class Label < Widget
-    def initialize(window, text, x, y)
-      super(window, x, y, 0, 0, :font_height => 60)
-      @width, @height = @font.text_width(text), @font.height
-      @text = text
+    required_arguments :window, :text, :x, :y
+    default_arguments width: 0, height: 0
+    def initialize(args = { })
+      super(args, :font_height => 60)
+      @text = args[:text]
+      @width, @height = @font.text_width(@text), @font.height
       @selectable = false
     end
 
     def draw
       @text.split("\n").each_with_index do |line, index|
-        @font.draw line, @x, @y + index*@font.height, @zorder, 1.0, 1.0
+        @font.draw text: line, x: @x, y: @y + index*@font.height
       end
     end
   end

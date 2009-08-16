@@ -2,6 +2,7 @@ module Widgets
   class Container < Widget
     attr_reader :widgets
     def initialize(window, x, y, width, height)
+    def initialize(args = { })
       super
       @widgets = WidgetList.new
     end

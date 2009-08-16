@@ -31,12 +31,12 @@ class MainWindow < Gosu::Window
     @fps = FPS.new(Gosu.milliseconds)
 
     @widgets = WidgetList.new
-    @widgets << Widgets::Window.new(self, 100, 100, 200, 200, :title => "Window 1")
-    @widgets << Widgets::Window.new(self, 150, 150, 200, 200, :title => "Window 2")
-    @widgets << Widgets::Window.new(self, 75, 200, 200, 200, :title => "Window 3")
-    @widgets << Widgets::Window.new(self, 50, 225, 200, 200, :title => "Window 4")
-    @widgets << Widgets::FPS.new(self, @fps, 400, 400)
-    @widgets << Widgets::Label.new(self, "Multi\nline¡€®ŦÆ", 400, 600)
+    @widgets << Widgets::Window.new(window: self, x: 100, y: 100, width: 200, height: 200, :title => "Window 1")
+    @widgets << Widgets::Window.new(window: self, x: 150, y: 150, width: 200, height: 200, :title => "Window 2")
+    @widgets << Widgets::Window.new(window: self, x: 75,  y: 200, width: 200, height: 200, :title => "Window 3")
+    @widgets << Widgets::Window.new(window: self, x: 50,  y: 225, width: 200, height: 200, :title => "Window 4")
+    @widgets << Widgets::FPS.new(window: self, fps: @fps, x: 400, y: 400)
+    @widgets << Widgets::Label.new(window: self, text: "Multi\nline¡€®ŦÆ", x: 400, y: 600)
 
     @widgets.set_active(@widgets[-1])
     @cursor  = Cursor.new(self, 'images/cursor.png', true)

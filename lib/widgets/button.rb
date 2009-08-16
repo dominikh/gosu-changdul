@@ -1,10 +1,12 @@
 module Widgets
   class Button < Widget
     attr_accessor :text
-    def initialize(window, text, x, y)
-      super(window, x, y, 0, 0)
-      @width, @height = @font.text_width(text)+10, @font.height+10
-      @text = text
+    required_arguments :window, :label, :x, :y
+    default_arguments width: 0, height: 0, x: 0, y: 0
+    def initialize(args = { })
+      super
+      @label = args[:label]
+      @width, @height = @font.text_width(@label)+10, @font.height+10
       @colors = {
         :normal => Gosu::Color.new(0xff00aaff),
         :hover  => Gosu::Color.new(0xff0000ff),
@@ -29,7 +31,7 @@ module Widgets
                         @x+@width, @y+@height, color,
                         @x, @y+@height, color, @zorder
                         )
-      @font.draw(@text, @x+5, @y+5, @zorder, 1.0, 1.0)
+      @font.draw(text: @label, x: @x+5, y: @y+5, zorder: @zorder)
     end
   end
 end
