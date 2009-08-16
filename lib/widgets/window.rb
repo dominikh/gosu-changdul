@@ -36,7 +36,7 @@ module Widgets
     def zorder=(val)
       super
       @widgets.each do |widget|
-        widget.zorder = widget.initial_zorder + val
+        widget.zorder = val
       end
     end
 
@@ -50,9 +50,18 @@ module Widgets
     end
 
     def drawable_area
+      # FIXME should ignore the titlebar again, without screwing up relative positions
+
+      # [
+      #  [@x, @y+@font.height+5],
+      #  [@x+@width, @y+@font.height+5],
+      #  [@x+@width, @y+@height],
+      #  [@x, @y+@height],
+      # ]
+
       [
-       [@x, @y+@font.height+5],
-       [@x+@width, @y+@font.height+5],
+       [@x, @y],
+       [@x+@width, @y],
        [@x+@width, @y+@height],
        [@x, @y+@height],
       ]

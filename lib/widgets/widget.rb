@@ -4,11 +4,8 @@ module Widgets
 
     attr_accessor :x
     attr_accessor :y
-    attr_reader :initial_x
-    attr_reader :initial_y
     attr_accessor :width
     attr_accessor :height
-    attr_reader :initial_zorder
     attr_accessor :zorder
     attr_writer :active
     attr_accessor :focussed
@@ -20,10 +17,8 @@ module Widgets
     def initialize(args = { })
       @window = args[:window]
       @x, @y, @width, @height = args[:x], args[:y], args[:width], args[:height]
-      @initial_x, @initial_y = @x, @y
       @selected = false
       @zorder = args[:zorder]
-      @initial_zorder = @zorder
       @active = false
       @focussed = false
       @signals = { :button_down => nil, :button_up => nil}
@@ -32,6 +27,14 @@ module Widgets
       @colors = { }
 
       @selectable = true
+    end
+
+    def real_x
+      @x + @parent.x
+    end
+
+    def real_y
+      @y + @parent.y
     end
 
     def corners
@@ -43,8 +46,21 @@ module Widgets
       ]
     end
 
+    def real_corners
+      [
+       [real_x, real_y],
+       [real_x+@width, real_y],
+       [real_x+@width, real_y+@height],
+       [real_x, real_y+@height],
+      ]
+    end
+
     def drawable_area
       corners
+    end
+
+    def real_drawable_area
+      real_corners
     end
 
     def opacity=(val)
@@ -73,7 +89,7 @@ module Widgets
     end
 
     def under_point?(xd, yd)
-      Gosu.point_in_box?(@x, @y, @x+@width, @y+@height, xd, yd)
+      Gosu.point_in_box?(real_x, real_y, real_x+@width, real_y+@height, xd, yd)
     end
 
     def draw
@@ -96,7 +112,7 @@ module Widgets
       @window.draw_quad(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
                         args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
                         args[:x3]+rel_x, args[:y3]+rel_y, args[:color3],
-                        args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], args[:zorder] + @zorder
+                        args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], @zorder
                         )
     end
 

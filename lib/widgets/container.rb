@@ -7,24 +7,10 @@ module Widgets
     end
 
     def add(widget, rel_x, rel_y)
-      widget.x = @x + rel_x
-      widget.y = @y + rel_y
+      widget.x = rel_x
+      widget.y = rel_y
       widget.parent = self
       @widgets << widget
-    end
-
-    def x=(val)
-      @widgets.each do |widget|
-        widget.x -= @x - val
-      end
-      super
-    end
-
-    def y=(val)
-      @widgets.each do |widget|
-        widget.y -= @y - val
-      end
-      super
     end
 
     def opacity=(val)

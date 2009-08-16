@@ -26,12 +26,14 @@ module Widgets
                       end
                      ]
 
-      @window.draw_quad(@x, @y, color,
-                        @x+@width, @y, color,
-                        @x+@width, @y+@height, color,
-                        @x, @y+@height, color, @zorder
+      @parent.draw_quad(x1: @x, y1: @y,
+                        x2: @x+@width, y2: @y,
+                        x3: @x+@width, y3: @y+@height,
+                        x4: @x, y4: @y+@height,
+                        zorder: @zorder, color: color
                         )
-      @font.draw(text: @label, x: @x+5, y: @y+5, zorder: @zorder)
+
+      @font.draw(text: @label, x: real_x+5, y: real_y+5, zorder: @zorder)
     end
   end
 end

@@ -1,4 +1,8 @@
 class FakeParent
+  attr_reader :x
+  attr_reader :y
+  attr_reader :width
+  attr_reader :height
   def initialize(x, y, width, height)
     @x, @y, @width, @height = x, y, width, height
   end
