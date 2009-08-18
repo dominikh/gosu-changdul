@@ -99,9 +99,19 @@ module Widgets
       super if defined? super
     end
 
-    # draw relative to the widget
-    # TODO don't draw outside the container
 
+    def clip_to_drawable_area(&block)
+      # FIXME we shouldnt have to work with floats at all here
+      area = real_drawable_area
+      x, y = area[0]
+      w = area[2][0] - x
+      h = area[2][1] - y
+      @window.clip_to(x.ceil, y.ceil, w.ceil, h.ceil, &block)
+    end
+
+    # draw relative to the widget
+    # FIXME don't share one color object
+    # FIXME actually implement relative zordering
     required_arguments :x1, :y1, :x2, :y22
     default_arguments zorder: 1, mode: :default, color1: Gosu::Color.new(0xffffffff), color2: Gosu::Color.new(0xffffffff), color: nil
     def draw_line(args = { })
@@ -109,10 +119,11 @@ module Widgets
         args[:color1], args[:color2] = args[:color], args[:color]
       end
       rel_x, rel_y = drawable_area[0]
-
-      @window.draw_line(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
-                        args[:x2]+rel_x, args[:y2]+rel_y, args[:color2], args[:zorder]
-                        )
+      clip_to_drawable_area do
+        @window.draw_line(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
+                          args[:x2]+rel_x, args[:y2]+rel_y, args[:color2], @zorder
+                          )
+      end
     end
 
     required_arguments :x1, :y1, :x2, :y2, :x3, :y3, :x4, :y4
@@ -122,12 +133,13 @@ module Widgets
         args[:color1], args[:color2], args[:color3], args[:color4] = args[:color], args[:color], args[:color], args[:color]
       end
       rel_x, rel_y = drawable_area[0]
-
-      @window.draw_quad(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
-                        args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
-                        args[:x3]+rel_x, args[:y3]+rel_y, args[:color3],
-                        args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], args[:zorder]
-                        )
+      clip_to_drawable_area do
+        @window.draw_quad(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
+                          args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
+                          args[:x3]+rel_x, args[:y3]+rel_y, args[:color3],
+                          args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], @zorder
+                          )
+      end
     end
 
     required_arguments :x1, :y1, :x2, :y2, :x3, :y3
@@ -136,11 +148,12 @@ module Widgets
       if args[:color]
         args[:color1], args[:color2], args[:color3] = args[:color], args[:color], args[:color]
       end
-
-      @window.draw_triangle(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
-                            args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
-                            args[:x3]+rel_x, args[:y3]+rel_y, args[:color3], args[:zorder]
-                            )
+      clip_to_drawable_area do
+        @window.draw_triangle(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
+                              args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
+                              args[:x3]+rel_x, args[:y3]+rel_y, args[:color3], @zorder
+                              )
+      end
     end
 
     def signal_connect(signal, &block)
