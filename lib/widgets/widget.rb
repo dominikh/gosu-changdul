@@ -116,7 +116,7 @@ module Widgets
     # TODO DRY the color objects, probably by extending keyword_arguments
     # TODO DRY all of the color handling in this 3 methods
     # FIXME actually implement relative zordering
-    required_arguments :x1, :y1, :x2, :y22
+    required_arguments :x1, :y1, :x2, :y2
     default_arguments zorder: 1, mode: :default, color1: lambda { Gosu::Color.new(0xffffffff) }, color2: lambda { Gosu::Color.new(0xffffffff) }, color: nil
     def draw_line(args = { })
       if args[:color]
