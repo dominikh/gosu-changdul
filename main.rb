@@ -11,6 +11,20 @@ module Gosu
   end
 end
 
+# TODO DRY this, it is a 1:1 dup of the Opacity module
+class Gosu::Color
+  def opacity
+    self.alpha / 255.0
+  end
+
+  def opacity=(val)
+    val = (val * 255).floor
+    val = 0 if val < 0
+    val = 255 if val > 255
+    self.alpha = val
+  end
+end
+
 require 'pp'
 require 'lib/opacity.rb'
 require 'lib/widgets/draggable.rb'
