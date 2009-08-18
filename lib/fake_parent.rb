@@ -7,6 +7,14 @@ class FakeParent
     @x, @y, @width, @height = x, y, width, height
   end
 
+  def real_x
+    @x
+  end
+
+  def real_y
+    @y
+  end
+
   def corners
     [
      [@x, @y],
@@ -18,5 +26,9 @@ class FakeParent
 
   def drawable_area
     corners
+  end
+
+  def zorder
+    1
   end
 end
