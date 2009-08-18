@@ -1,9 +1,12 @@
 module Opacity
   def opacity
-    @colors.values.first.alpha / 255.0
+    @opacity
   end
 
   def opacity=(val)
+    val = 1 if val > 1
+    val = 0 if val < 0
+    @opacity = val
     val = (val * 255).floor
     val = 0 if val < 0
     val = 255 if val > 255
