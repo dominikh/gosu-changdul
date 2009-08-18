@@ -6,7 +6,7 @@ module Widgets
       super
       @label = Label.new(window: @window, text: args[:label], x: 5, y: 5)
       @width, @height = @label.width+10, @label.height+10
-      self.add @label, 5, 5
+      self.add @label
 
       @colors = {
         :normal => Gosu::Color.new(0xff00aaff),
