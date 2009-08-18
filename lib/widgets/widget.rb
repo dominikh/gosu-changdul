@@ -30,11 +30,11 @@ module Widgets
     end
 
     def real_x
-      @x + @parent.x
+      @x + @parent.real_x
     end
 
     def real_y
-      @y + @parent.y
+      @y + @parent.real_y
     end
 
     def corners
