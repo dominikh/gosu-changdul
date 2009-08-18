@@ -79,8 +79,8 @@ class MainWindow < Gosu::Window
 
     @widgets[0].draw_quad(
                            x1: 10, y1: 10,
-                           x2: 50, y2: 10,
-                           x3: 50, y3: 50,
+                           x2: 300, y2: 10,
+                           x3: 300, y3: 50,
                            x4: 10, y4: 50,
                            color: Gosu::Color.new(0xffffffff)
                            )
