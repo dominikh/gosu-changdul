@@ -2,10 +2,10 @@ class Font < Gosu::Font
   include Opacity
 
   required_arguments :window, :height
-  default_arguments color: Gosu::Color.new(0xffffffff), font: Gosu.default_font_name
+  default_arguments color: lambda{ Gosu::Color.new(0xffffffff) }, font: Gosu.default_font_name
   def initialize(args = { })
     super(args[:window], args[:font], args[:height])
-    @colors = { :font => args[:color] }
+    @colors = { :font => args[:color].call }
   end
 
 
