@@ -11,11 +11,12 @@ module Gosu
   end
 end
 
+require 'pp'
 require 'lib/opacity.rb'
 require 'lib/widgets/draggable.rb'
 require 'lib/widgets/widget.rb'
-require 'lib/widgets/button.rb'
 require 'lib/widgets/container.rb'
+require 'lib/widgets/button.rb'
 require 'lib/widgets/window.rb'
 require 'lib/fake_parent.rb'
 require 'lib/cursor.rb'
@@ -67,14 +68,22 @@ class MainWindow < Gosu::Window
   end
 
   def update
-    @fps.tick(Gosu.milliseconds)
     update_widgets
     @updated_widgets = false
   end
 
   def draw
+    @fps.tick(Gosu.milliseconds)
     @cursor.draw
     @widgets.each(&:draw)
+
+    @widgets[0].draw_quad(
+                           x1: 10, y1: 10,
+                           x2: 50, y2: 10,
+                           x3: 50, y3: 50,
+                           x4: 10, y4: 50,
+                           color: Gosu::Color.new(0xffffffff)
+                           )
   end
 end
 
