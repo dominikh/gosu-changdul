@@ -6,9 +6,7 @@ module Widgets
       @widgets = WidgetList.new
     end
 
-    def add(widget, rel_x, rel_y)
-      widget.x = rel_x
-      widget.y = rel_y
+    def add(widget)
       widget.parent = self
       @widgets << widget
     end

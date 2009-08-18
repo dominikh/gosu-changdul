@@ -8,17 +8,17 @@ module Widgets
       super
       @title = args[:title]
 
-      b = Widgets::Button.new(window: @window, label: "Decrease opacity")
+      b = Widgets::Button.new(window: @window, label: "Decrease opacity", x: 50, y: 50)
       b.signal_connect(:click) do
         self.opacity -= 0.1
       end
-      add(b, 50, 50)
+      add(b)
 
-      b = Widgets::Button.new(window: @window, label: "Increase opacity")
+      b = Widgets::Button.new(window: @window, label: "Increase opacity", x: 50, y: 80)
       b.signal_connect(:click) do
         self.opacity += 0.1
       end
-      add(b, 50, 80)
+      add(b)
 
       @colors = { }
       color = Gosu::Color.new(0xff000000)
