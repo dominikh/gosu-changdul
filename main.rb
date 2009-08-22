@@ -26,19 +26,28 @@ class Gosu::Color
 end
 
 require 'pp'
-require 'lib/opacity.rb'
-require 'lib/widgets/draggable.rb'
-require 'lib/widgets/widget.rb'
-require 'lib/widgets/container.rb'
-require 'lib/widgets/button.rb'
-require 'lib/widgets/window.rb'
-require 'lib/fake_parent.rb'
-require 'lib/cursor.rb'
-require 'lib/font.rb'
-require 'lib/widget_list.rb'
-require 'lib/fps'
-require 'lib/widgets/label'
-require 'lib/widgets/fps'
+
+exceptions = {
+  'lib/fps.rb' => 'FPS',
+  'lib/widgets/fps.rb' => 'FPS'
+}
+
+Dir.glob('lib/**/*.rb') do |f|
+  parts = f.split('/')[1..-1]
+
+  m = parts[0..-2].map(&:capitalize).inject(Kernel) do |memo, s|
+    unless memo.const_defined?(s.to_sym)
+      m = memo.module_eval { Module.new }
+      memo.const_set(s.to_sym, m)
+    else
+      m = memo.const_get(s.to_sym)
+    end
+  end
+
+  klass = exceptions[f] || f[/\/(\w+?)\.rb$/, 1].split('_').map(&:capitalize).join
+
+  m.autoload klass.to_sym, f
+end
 
 class MainWindow < Gosu::Window
   def initialize
