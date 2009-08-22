@@ -15,17 +15,20 @@ class FakeParent
     @y
   end
 
-  def corners
-    [
-     [@x, @y],
-     [@x+@width, @y],
-     [@x+@width, @y+@height],
-     [@x, @y+@height],
-    ]
+  def rect
+    Gosu::Rect.new(@x, @y, @width, @height)
+  end
+
+  def real_rect
+    rect
   end
 
   def drawable_area
-    corners
+    rect
+  end
+
+  def real_drawable_area
+    drawable_area
   end
 
   def zorder

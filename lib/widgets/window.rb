@@ -41,30 +41,12 @@ module Widgets
     end
 
     def titlebar_points
-      [
-       [@x, @y],
-       [@x+@width, @y],
-       [@x+@width, @y+@font.height+5],
-       [@x, @y+@font.height+5],
-      ]
+      Gosu::Rect.new(@x, @y, @width, @font.height+5)
     end
 
     def drawable_area
       # FIXME should ignore the titlebar again, without screwing up relative positions
-
-      # [
-      #  [@x, @y+@font.height+5],
-      #  [@x+@width, @y+@font.height+5],
-      #  [@x+@width, @y+@height],
-      #  [@x, @y+@height],
-      # ]
-
-      [
-       [@x, @y],
-       [@x+@width, @y],
-       [@x+@width, @y+@height],
-       [@x, @y+@height],
-      ]
+      rect
     end
 
     def drag_init_area
@@ -77,7 +59,10 @@ module Widgets
                         @x+@width, @y+@height, @colors[:body],
                         @x, @y+@height, @colors[:body], @zorder)
 
-      x1, y1, x2, y2, x3, y3, x4, y4 = *(titlebar_points.flatten)
+      x1, y1 = titlebar_points.topleft
+      x2, y2 = titlebar_points.topright
+      x3, y3 = titlebar_points.bottomright
+      x4, y4 = titlebar_points.bottomleft
       tcolor = active? ? :active : :inactive
 
       @window.draw_quad(x1, y1, @colors[:titlebar][tcolor],

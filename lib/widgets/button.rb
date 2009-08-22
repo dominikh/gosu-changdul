@@ -27,12 +27,7 @@ module Widgets
                       end
                      ]
 
-      @parent.draw_quad(x1: @x, y1: @y,
-                        x2: @x+@width, y2: @y,
-                        x3: @x+@width, y3: @y+@height,
-                        x4: @x, y4: @y+@height,
-                        zorder: @zorder, color: color
-                        )
+      @parent.draw_quad(rect: self.rect, zorder: @zorder, color: color)
 
       super
     end

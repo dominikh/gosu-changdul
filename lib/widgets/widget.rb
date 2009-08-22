@@ -32,6 +32,14 @@ module Widgets
                    # module, too
     end
 
+    def rect
+      Gosu::Rect.new(@x, @y, @width, @height)
+    end
+
+    def real_rect
+      Gosu::Rect.new(real_x, real_y, @width, @height)
+    end
+
     def real_x
       @x + @parent.real_x
     end
@@ -40,30 +48,12 @@ module Widgets
       @y + @parent.real_y
     end
 
-    def corners
-      [
-       [@x, @y],
-       [@x+@width, @y],
-       [@x+@width, @y+@height],
-       [@x, @y+@height],
-      ]
-    end
-
-    def real_corners
-      [
-       [real_x, real_y],
-       [real_x+@width, real_y],
-       [real_x+@width, real_y+@height],
-       [real_x, real_y+@height],
-      ]
-    end
-
     def drawable_area
-      corners
+      rect
     end
 
     def real_drawable_area
-      real_corners
+      real_rect
     end
 
     def opacity=(val)
@@ -92,7 +82,7 @@ module Widgets
     end
 
     def under_point?(xd, yd)
-      Gosu.point_in_box?(real_x, real_y, real_x+@width, real_y+@height, xd, yd)
+      real_rect.collide_point? xd, yd
     end
 
     def draw
@@ -106,9 +96,8 @@ module Widgets
     def clip_to_drawable_area(&block)
       # FIXME we shouldnt have to work with floats at all here
       area = real_drawable_area
-      x, y = area[0]
-      w = area[2][0] - x
-      h = area[2][1] - y
+      x, y = area.topleft
+      w, h = area.size
       @window.clip_to(x.ceil, y.ceil, w.ceil, h.ceil, &block)
     end
 
@@ -117,74 +106,98 @@ module Widgets
     # TODO DRY all of the color handling in this 3 methods
     # FIXME actually implement relative zordering
     required_arguments :x1, :y1, :x2, :y2
-    default_arguments zorder: 1, mode: :default, color1: lambda { Gosu::Color.new(0xffffffff) }, color2: lambda { Gosu::Color.new(0xffffffff) }, color: nil
+    # default_arguments zorder: 1, mode: :default, color1: lambda { Gosu::Color.new(0xffffffff) }, color2: lambda { Gosu::Color.new(0xffffffff) }, color: nil
+    default_arguments zorder: 1, mode: :default, colors: [
+                                                          Gosu::Color.new(0xffffffff),
+                                                          Gosu::Color.new(0xffffffff),
+                                                         ], color: nil
     def draw_line(args = { })
       if args[:color]
-        args[:color1], args[:color2] = args[:color], args[:color]
+        colors = [args[:color]] * 2
       else
-        args[:color1] = args[:color1].call.dup
-        args[:color2] = args[:color2].call.dup
+        colors = args[:colors].map(&:dup)
       end
 
-      args[:color1].opacity = @opacity
-      args[:color2].opacity = @opacity
+      colors.each do |color|
+        color.opacity = @opacity
+      end
 
       rel_x, rel_y = drawable_area[0]
       clip_to_drawable_area do
-        @window.draw_line(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
-                          args[:x2]+rel_x, args[:y2]+rel_y, args[:color2], @zorder
+        @window.draw_line(args[:x1]+rel_x, args[:y1]+rel_y, colors[0],
+                          args[:x2]+rel_x, args[:y2]+rel_y, colors[1], @zorder
                           )
       end
     end
 
-    required_arguments :x1, :y1, :x2, :y2, :x3, :y3, :x4, :y4
-    default_arguments zorder: 1, mode: :default, color1: lambda { Gosu::Color.new(0xffffffff) }, color2: lambda { Gosu::Color.new(0xffffffff) }, color3: lambda { Gosu::Color.new(0xffffffff) }, color4: lambda { Gosu::Color.new(0xffffffff) }, color: nil
+    required_arguments :rect
+    default_arguments colors: [
+                               Gosu::Color.new(0xffffffff),
+                               Gosu::Color.new(0xffffffff),
+                               Gosu::Color.new(0xffffffff),
+                               Gosu::Color.new(0xffffffff),
+    ], zorder: 1, mode: :default, color: nil
     def draw_quad(args = { })
       if args[:color]
-        args[:color1], args[:color2], args[:color3], args[:color4] = args[:color], args[:color], args[:color], args[:color]
+        colors = [args[:color]] * 4
       else
-        args[:color1] = args[:color1].call.dup
-        args[:color2] = args[:color2].call.dup
-        args[:color3] = args[:color3].call.dup
-        args[:color4] = args[:color4].call.dup
+        colors = args[:colors].map(&:dup)
       end
 
-      args[:color1].opacity = @opacity
-      args[:color2].opacity = @opacity
-      args[:color3].opacity = @opacity
-      args[:color4].opacity = @opacity
+      colors.each do |color|
+        color.opacity = @opacity
+      end
 
 
-      rel_x, rel_y = drawable_area[0]
+      rel_x, rel_y = drawable_area.topleft
+
+      rel_rect = args[:rect].move(rel_x, rel_y)
+
+      x1, y1 = rel_rect.topleft
+      x2, y2 = rel_rect.topright
+      x3, y3 = rel_rect.bottomright
+      x4, y4 = rel_rect.bottomleft
+
       clip_to_drawable_area do
-        @window.draw_quad(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
-                          args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
-                          args[:x3]+rel_x, args[:y3]+rel_y, args[:color3],
-                          args[:x4]+rel_x, args[:y4]+rel_y, args[:color4], @zorder
+        @window.draw_quad(x1, y1, colors[0],
+                          x2, y2, colors[1],
+                          x3, y3, colors[2],
+                          x4, y4, colors[3], @zorder
                           )
       end
     end
 
     required_arguments :x1, :y1, :x2, :y2, :x3, :y3
-    default_arguments zorder: 1, mode: :default, color1: lambda { Gosu::Color.new(0xffffffff) }, color2: lambda { Gosu::Color.new(0xffffffff) }, color3: lambda { Gosu::Color.new(0xffffffff) }, color: nil
+    default_arguments zorder: 1, mode: :default, colors: [
+                                                          Gosu::Color.new(0xffffffff),
+                                                          Gosu::Color.new(0xffffffff),
+                                                          Gosu::Color.new(0xffffffff)], color: nil
     def draw_triangle(args = { })
       if args[:color]
-        args[:color1], args[:color2], args[:color3] = args[:color], args[:color], args[:color]
+        colors = [args[:color]] * 3
       else
-        args[:color1] = args[:color1].call.dup
-        args[:color2] = args[:color2].call.dup
-        args[:color3] = args[:color3].call.dup
+        colors = args[:colors].map(&:dup)
       end
 
-      args[:color1].opacity = @opacity
-      args[:color2].opacity = @opacity
-      args[:color3].opacity = @opacity
+      colors.each do |color|
+        color.opacity = @opacity
+      end
 
       clip_to_drawable_area do
-        @window.draw_triangle(args[:x1]+rel_x, args[:y1]+rel_y, args[:color1],
-                              args[:x2]+rel_x, args[:y2]+rel_y, args[:color2],
-                              args[:x3]+rel_x, args[:y3]+rel_y, args[:color3], @zorder
+        @window.draw_triangle(args[:x1]+rel_x, args[:y1]+rel_y, colors[0],
+                              args[:x2]+rel_x, args[:y2]+rel_y, colors[1],
+                              args[:x3]+rel_x, args[:y3]+rel_y, colors[2], @zorder
                               )
+      end
+    end
+
+    required_arguments :x, :y, :radius, :stroke
+    default_arguments zorder: 1, color: Gosu::Color.new(0xffffffff)
+    def draw_circle(args = { })
+      args[:color] = args[:color].dup
+
+      clip_to_drawable_area do
+        @window.draw_circle(args[:x], args[:y], args[:radius], args[:stroke], args[:color])
       end
     end
 
