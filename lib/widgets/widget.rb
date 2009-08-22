@@ -149,7 +149,7 @@ module Widgets
       end
 
 
-      rel_x, rel_y = drawable_area.topleft
+      rel_x, rel_y = real_drawable_area.topleft
 
       rel_rect = args[:rect].move(rel_x, rel_y)
 
@@ -182,6 +182,8 @@ module Widgets
       colors.each do |color|
         color.opacity = @opacity
       end
+
+      rel_x, rel_y = real_drawable_area.topleft
 
       clip_to_drawable_area do
         @window.draw_triangle(args[:x1]+rel_x, args[:y1]+rel_y, colors[0],
