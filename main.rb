@@ -26,6 +26,7 @@ class Gosu::Color
 end
 
 require 'pp'
+require 'lib/gosu/window'
 
 exceptions = {
   'lib/fps.rb' => 'FPS',
