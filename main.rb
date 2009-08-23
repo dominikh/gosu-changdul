@@ -57,14 +57,18 @@ class MainWindow < Gosu::Window
     @fps = FPS.new(Gosu.milliseconds)
 
     @widgets = WidgetList.new
-    @widgets << Widgets::Window.new(window: self, x: 100, y: 100, width: 200, height: 200, :title => "Window 1")
+    @widgets << Widgets::Window.new(window: self, x: 100, y: 100, width: 300, height: 300, :title => "Window 1")
     @widgets << Widgets::Window.new(window: self, x: 150, y: 150, width: 200, height: 200, :title => "Window 2")
     @widgets << Widgets::Window.new(window: self, x: 75,  y: 200, width: 200, height: 200, :title => "Window 3")
     @widgets << Widgets::Window.new(window: self, x: 50,  y: 225, width: 200, height: 200, :title => "Window 4")
     @widgets << Widgets::FPS.new(window: self, fps: @fps, x: 400, y: 400)
     @widgets << Widgets::Label.new(window: self, text: "Multi\nline¡€®ŦÆ", x: 400, y: 600)
 
-    @widgets.set_active(@widgets[-1])
+    @widgets.set_active(@widgets[0])
+
+    @widgets[0..3].each do |widget|
+      widget.add Widgets::XEyes.new(window: self, x: 50, y: 150, width: 200, height: 200)
+    end
     @cursor  = Cursor.new(self, 'images/cursor.png', true)
   end
 
@@ -101,14 +105,6 @@ class MainWindow < Gosu::Window
     @fps.tick(Gosu.milliseconds)
     @cursor.draw
     @widgets.each(&:draw)
-
-    @widgets[0].draw_quad(
-                           x1: 10, y1: 10,
-                           x2: 300, y2: 10,
-                           x3: 300, y3: 50,
-                           x4: 10, y4: 50,
-                           color: Gosu::Color.new(0xffffffff)
-                           )
   end
 end
 
