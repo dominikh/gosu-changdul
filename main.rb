@@ -30,7 +30,8 @@ require 'lib/gosu/window'
 
 exceptions = {
   'lib/fps.rb' => 'FPS',
-  'lib/widgets/fps.rb' => 'FPS'
+  'lib/widgets/fps.rb' => 'FPS',
+  'lib/widgets/xeyes.rb' => 'XEyes',
 }
 
 Dir.glob('lib/**/*.rb') do |f|
