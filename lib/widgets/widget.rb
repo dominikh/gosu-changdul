@@ -2,14 +2,14 @@ module Widgets
   class Widget
     include Opacity
 
-    attr_accessor :x
-    attr_accessor :y
-    attr_accessor :width
-    attr_accessor :height
+    attr_reader :x
+    attr_reader :y
+    attr_reader :width
+    attr_reader :height
     attr_accessor :zorder
     attr_writer :active
     attr_accessor :focussed
-    attr_accessor :parent
+    attr_reader :parent
     attr_accessor :selectable
 
     required_arguments :window, :x, :y, :width, :height
@@ -32,20 +32,38 @@ module Widgets
                    # module, too
     end
 
+
+    [:x, :y, :width, :height, :parent].each do |attr|
+      var = ("@" + attr.to_s).to_sym
+      setter = (attr.to_s + "=").to_sym
+      define_method(setter) do |val|
+        return if instance_variable_get(var) == val
+        instance_variable_set(var, val)
+        reset_caches
+      end
+    end
+
+    def reset_caches
+      @rect = nil
+      @real_rect = nil
+      @real_x = nil
+      @real_y = nil
+    end
+
     def rect
-      Gosu::Rect.new(@x, @y, @width, @height)
+      @rect ||= Gosu::Rect.new(@x, @y, @width, @height)
     end
 
     def real_rect
-      Gosu::Rect.new(real_x, real_y, @width, @height)
+      @real_rect ||= Gosu::Rect.new(real_x, real_y, @width, @height)
     end
 
     def real_x
-      @x + @parent.real_x
+      @real_x ||= @x + @parent.real_x
     end
 
     def real_y
-      @y + @parent.real_y
+      @real_y ||= @y + @parent.real_y
     end
 
     def drawable_area

@@ -42,6 +42,11 @@ module Widgets
       super
     end
 
+    def reset_caches
+      super
+      @widgets.each(&:reset_caches)
+    end
+
     def update
       @widgets.each(&:update)
       super
