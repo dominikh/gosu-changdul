@@ -194,13 +194,13 @@ module Widgets
     end
 
     required_arguments :x, :y, :radius, :stroke
-    default_arguments zorder: 1, color: Gosu::Color.new(0xffffffff)
+    default_arguments zorder: 1, color: Gosu::Color.new(0xffffffff), segments: 45
     def draw_circle(args = { })
       args[:color].opacity = @opacity
       rel_x, rel_y = real_drawable_area.topleft
 
       clip_to_drawable_area do
-        @window.draw_circle(args[:x]+rel_x, args[:y]+rel_y, args[:radius], args[:stroke], args[:color], @zorder)
+        @window.draw_circle(args[:x]+rel_x, args[:y]+rel_y, args[:radius], args[:stroke], args[:color], @zorder, args[:segments])
       end
     end
 

@@ -1,10 +1,9 @@
 module Gosu
   class Window
-    def draw_circle(x, y, r1, r2, color, zorder = 1)
+    def draw_circle(x, y, r1, r2, color, zorder = 1, segments = 45)
       radius = r1
       stroke = r2
 
-      segments = 45
       a_segments = 360 / segments
 
       outer = []

@@ -31,8 +31,8 @@ module Widgets
 
       def draw
         x, y = pupil_pos
-        @parent.draw_circle(x: @x+SOCKET_RADIUS, y: @y+SOCKET_RADIUS, radius: SOCKET_RADIUS, stroke: SOCKET_RADIUS) # the socket
-        @parent.draw_circle(x: x+PUPIL_RADIUS, y: y+PUPIL_RADIUS, radius: PUPIL_RADIUS, stroke: PUPIL_RADIUS, color: Gosu::Color.new(0xff000000)) # the pupil
+        @parent.draw_circle(x: @x+SOCKET_RADIUS, y: @y+SOCKET_RADIUS, radius: SOCKET_RADIUS, stroke: SOCKET_RADIUS, segments: 15) # the socket
+        @parent.draw_circle(x: x+PUPIL_RADIUS, y: y+PUPIL_RADIUS, radius: PUPIL_RADIUS, stroke: PUPIL_RADIUS, color: Gosu::Color.new(0xff000000), segments: 10) # the pupil
       end
     end
 
