@@ -122,7 +122,7 @@ module Widgets
         color.opacity = @opacity
       end
 
-      rel_x, rel_y = drawable_area[0]
+      rel_x, rel_y = real_drawable_area.top_left
       clip_to_drawable_area do
         @window.draw_line(args[:x1]+rel_x, args[:y1]+rel_y, colors[0],
                           args[:x2]+rel_x, args[:y2]+rel_y, colors[1], @zorder
