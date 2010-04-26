@@ -1,7 +1,7 @@
 module Widgets
   class Label < Widget
     required_arguments :window, :text, :x, :y
-    default_arguments width: 0, height: 0
+    default_arguments {{width: 0, height: 0}}
     def initialize(args = { })
       super(args, :font_height => 60)
       self.text = args[:text]

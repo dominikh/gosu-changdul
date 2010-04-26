@@ -3,7 +3,7 @@ module Widgets
     include Draggable
 
     attr_accessor :title
-    default_arguments title: "<nil>"
+    default_arguments {{title: "<nil>"}}
     def initialize(args = { })
       super
       @title = args[:title]

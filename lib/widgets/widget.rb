@@ -13,7 +13,7 @@ module Widgets
     attr_accessor :selectable
 
     required_arguments :window, :x, :y, :width, :height
-    default_arguments zorder: 1, font_height: 16
+    default_arguments {{zorder: 1, font_height: 16}}
     def initialize(args = { })
       @window = args[:window]
       @x, @y, @width, @height = args[:x], args[:y], args[:width], args[:height]
@@ -125,10 +125,10 @@ module Widgets
     # FIXME actually implement relative zordering
     required_arguments :x1, :y1, :x2, :y2
     # default_arguments zorder: 1, mode: :default, color1: lambda { Gosu::Color.new(0xffffffff) }, color2: lambda { Gosu::Color.new(0xffffffff) }, color: nil
-    default_arguments zorder: 1, mode: :default, colors: [
+    default_arguments {{zorder: 1, mode: :default, colors: [
                                                           Gosu::Color.new(0xffffffff),
                                                           Gosu::Color.new(0xffffffff),
-                                                         ], color: nil
+                                                           ], color: nil}}
     def draw_line(args = { })
       if args[:color]
         colors = [args[:color]] * 2
@@ -149,12 +149,12 @@ module Widgets
     end
 
     required_arguments :rect
-    default_arguments colors: [
+    default_arguments {{colors: [
                                Gosu::Color.new(0xffffffff),
                                Gosu::Color.new(0xffffffff),
                                Gosu::Color.new(0xffffffff),
                                Gosu::Color.new(0xffffffff),
-    ], zorder: 1, mode: :default, color: nil
+                                ], zorder: 1, mode: :default, color: nil}}
     def draw_quad(args = { })
       if args[:color]
         colors = [args[:color]] * 4
@@ -186,10 +186,10 @@ module Widgets
     end
 
     required_arguments :x1, :y1, :x2, :y2, :x3, :y3
-    default_arguments zorder: 1, mode: :default, colors: [
-                                                          Gosu::Color.new(0xffffffff),
-                                                          Gosu::Color.new(0xffffffff),
-                                                          Gosu::Color.new(0xffffffff)], color: nil
+    default_arguments {{zorder: 1, mode: :default, colors: [
+                                                            Gosu::Color.new(0xffffffff),
+                                                            Gosu::Color.new(0xffffffff),
+                                                            Gosu::Color.new(0xffffffff)], color: nil}}
     def draw_triangle(args = { })
       if args[:color]
         colors = [args[:color]] * 3
@@ -212,7 +212,7 @@ module Widgets
     end
 
     required_arguments :x, :y, :radius, :stroke
-    default_arguments zorder: 1, color: Gosu::Color.new(0xffffffff), segments: 45
+    default_arguments {{zorder: 1, color: Gosu::Color.new(0xffffffff), segments: 45}}
     def draw_circle(args = { })
       args[:color].opacity = @opacity
       rel_x, rel_y = real_drawable_area.topleft

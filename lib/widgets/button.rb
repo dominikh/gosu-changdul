@@ -1,7 +1,7 @@
 module Widgets
   class Button < Container
     required_arguments :window, :label, :x, :y
-    default_arguments width: 0, height: 0, x: 0, y: 0
+    default_arguments {{width: 0, height: 0, x: 0, y: 0}}
     def initialize(args = { })
       super
       @label = Label.new(window: @window, text: args[:label], x: 5, y: 5)

@@ -3,7 +3,7 @@ module Widgets
     class Eye < Widget
       SOCKET_RADIUS = 15
       PUPIL_RADIUS  = 5
-      default_arguments width: 200, height: 200
+      default_arguments {{width: 200, height: 200}}
       def initialize(args = { })
         super
       end
